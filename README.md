@@ -4,7 +4,7 @@ We want to have more anchors being outputted from the dwm_loc_get
 
 - Install [Ghidra](https://github.com/NationalSecurityAgency/ghidra)
 - We first need to change the the hard coded limit of the number of anchors that will be stored 
-  - Open the libdwm.a/dwm-api-cmd-infra.o file
+  - Open the `libdwm.a/dwm-api-cmd-infra.o` file
   - Search for the `undefined4 dwm_api_cmd_loc_get(undefined1 *param_1)` function
   - ```C
     if (iVar2 < 5) {
@@ -35,3 +35,6 @@ We want to have more anchors being outputted from the dwm_loc_get
       *pbVar7 = 5;
     }
     ```
+  - Other important functions
+    - `uwbmac_loc_get` is at `libdwm.a/uwbmac.o`
+    - `le_loc_get` is at `libdwm.a/process-le.o`
