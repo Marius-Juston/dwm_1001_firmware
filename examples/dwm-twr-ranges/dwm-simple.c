@@ -134,14 +134,54 @@ void app_thread_entry(uint32_t data)
 	dwm_evt_listener_register(
 			DWM_EVT_LOC_READY, NULL);
 
-	while (1) {
-		/* Thread loop */
-            rv = dwm_evt_wait(&evt);
 
-            if (rv == DWM_OK) {
-                    on_dwm_evt(&evt);
-            }
-	}
+        
+        dwm_loc_data_t loc;
+        int i;
+
+        volatile uint8_t* const _meas_cnt = (volatile uint8_t*) 0x200070E0;
+        
+
+        while(1){
+        *_meas_cnt = 5;
+        printf("%d", *_meas_cnt);
+          //*_meas_cnt = 5;
+          /* if pos_available is false, position data are not read and function returns without error */
+          rv = dwm_loc_get(&loc);
+
+          if (0 == rv) {
+          if (loc.pos_available) {
+          printf("[%ld,%ld,%ld,%u] ", loc.pos.x, loc.pos.y, loc.pos.z,
+          loc.pos.qf);
+          }
+          for (i = 0; i < loc.anchors.dist.cnt; ++i) {
+          printf("%u)", i);
+          printf("0x%04x", loc.anchors.dist.addr[i]);
+          if (i < loc.anchors.an_pos.cnt) {
+          printf("[%ld,%ld,%ld,%u]", loc.anchors.an_pos.pos[i].x,
+          loc.anchors.an_pos.pos[i].y,
+          loc.anchors.an_pos.pos[i].z,
+          loc.anchors.an_pos.pos[i].qf);
+          }
+          printf("=%lu,%u ", loc.anchors.dist.dist[i], loc.anchors.dist.qf[i]);
+          }
+          printf("\n");
+          } else {
+          printf("err code: %d\n", rv);
+          }
+
+        
+        }
+
+
+	//while (1) {
+	//	/* Thread loop */
+ //           rv = dwm_evt_wait(&evt);
+
+ //           if (rv == DWM_OK) {
+ //                   on_dwm_evt(&evt);
+ //           }
+	//}
 }
 
 /**
