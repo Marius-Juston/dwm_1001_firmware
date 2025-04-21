@@ -98,6 +98,39 @@ We want to have more anchors being outputted from the dwm_loc_get
     ```
     (80 bytes for each piece of information)
 
+  - Need to modify the definition of `.anc_pos` as well so to do this:
+      ```
+      s::00000820 3b 03 00 00 08  Elf32_Shdr                        [52]
+              00 00 00 03 00 
+              00 00 00 00 00
+      s::00000820 3b 03 00 00     ddw       33Bh                    sh_name       .bss.an_pos - SHT_
+      s::00000824 08 00 00 00     Elf_Sect  SHT_NOBITS              sh_type
+      s::00000828 03 00 00 00     ddw       3h                      sh_flags
+      s::0000082c 00 00 00 00     ddw       an_pos                  sh_addr       = ??
+      s::00000830 20 25 00 00     ddw       2520h                   sh_offset
+      s::00000834 60 00 00 00     ddw       60h                     sh_size
+      s::00000838 00 00 00 00     ddw       0h                      sh_link
+      s::0000083c 00 00 00 00     ddw       0h                      sh_info
+      s::00000840 08 00 00 00     ddw       8h                      sh_addralign
+      s::00000844 00 00 00 00     ddw       0h                      sh_entsize
+    ```
+    and we want to be changing the `s::00000834 60 00 00 00     ddw       60h                     sh_size` to instead be `0x60` = 96 bytes = 4 anchors × 3 coordinates × 4 bytes to `0x78` = 120 bytes = 5 anchors × 3 coordinates × 4 bytes as such
+    ```
+      s::00000820 3b 03 00 00 08  Elf32_Shdr                        [52]
+              00 00 00 03 00 
+              00 00 00 00 00
+      s::00000820 3b 03 00 00     ddw       33Bh                    sh_name       .bss.an_pos - SHT_
+      s::00000824 08 00 00 00     Elf_Sect  SHT_NOBITS              sh_type
+      s::00000828 03 00 00 00     ddw       3h                      sh_flags
+      s::0000082c 00 00 00 00     ddw       an_pos                  sh_addr       = ??
+      s::00000830 20 25 00 00     ddw       2520h                   sh_offset
+      s::00000834 78 00 00 00     ddw       78h                     sh_size
+      s::00000838 00 00 00 00     ddw       0h                      sh_link
+      s::0000083c 00 00 00 00     ddw       0h                      sh_info
+      s::00000840 08 00 00 00     ddw       8h                      sh_addralign
+      s::00000844 00 00 00 00     ddw       0h                      sh_entsize
+    ```
+
 # Event listneing
 
 - `dwm_evet_listener_register` is in `libdwm.a/dwm.o`
