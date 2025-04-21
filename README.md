@@ -38,3 +38,7 @@ We want to have more anchors being outputted from the dwm_loc_get
   - Other important functions
     - `uwbmac_loc_get` is at `libdwm.a/uwbmac.o`
     - `le_loc_get` is at `libdwm.a/process-le.o`
+
+- Then we need to File -> Export Program -> Orginal File
+- Then we need to relink the static library
+  - `ar rcs libdwm.a dwm-api-cmd-infra.o`
