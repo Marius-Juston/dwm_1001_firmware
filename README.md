@@ -42,3 +42,37 @@ We want to have more anchors being outputted from the dwm_loc_get
 - Then we need to File -> Export Program -> Orginal File
 - Then we need to relink the static library
   - `ar rcs libdwm.a dwm-api-cmd-infra.o`
+
+
+- We also need to change inside the `uwbmac_twr_fsm_inr_entry` in `libdwm.a/uwbmac-sstwr.o`
+ - ```C
+    do {
+      iVar12 = iVar4 + 1;
+      if (iVar4 < (int)(uint)*(byte *)(iVar11 + 0x474)) {
+        uVar5 = *puVar9;
+      }
+      else {
+        uVar5 = 0xffff;
+      }
+      *(undefined2 *)(iVar3 + iVar4 * 2 + 0x10) = uVar5;
+      puVar9 = puVar9 + 0x28;
+      iVar4 = iVar12;
+    } while (iVar12 != 4);
+    ```
+    To instead be `while (iVar12 != 5)`
+    which requests changing 
+    ```
+    000104da 05 2e           cmp        r6,#0x4
+    ```
+    to 
+    ```
+    000104da 05 2e           cmp        r6,#0x5
+    ```
+
+# Event listneing
+
+- `dwm_evet_listener_register` is in `libdwm.a/dwm.o`
+- `uwbmac_listener_register` is in `libdwm.a/uwbmac.o`
+- Once it has a location it then calls the `uwb_loc_cb_call` function in `libdwm.a/uwbmac.o`
+- Where the function calls `uwbmac_cb` which is in `libdwm.a/dwm-api.o`
+
