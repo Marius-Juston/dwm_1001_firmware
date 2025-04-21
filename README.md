@@ -68,6 +68,26 @@ We want to have more anchors being outputted from the dwm_loc_get
     ```
     000104da 05 2e           cmp        r6,#0x5
     ```
+- We also need to change inside the `uwbmac_twr_fsm_result_process` in `libdwm.a/uwbmac-tn.o`
+ - ```C
+    if (uVar11 == 5) {
+      uVar5 = *(uint *)(iVar10 + 0xe4) & 0xffffffbf;
+    }
+    if (uVar11 == 5) {
+      *(uint *)(iVar10 + 0xe4) = uVar5;
+      uVar15 = CONCAT44(DAT_0001256c,DAT_00012568);
+    }
+    ```
+    To instead be `while (iVar12 != 5)`
+    which requests changing 
+    ```
+    000110ca 05 2d           cmp        r5,#0x4
+
+    ```
+    to 
+    ```
+    000110ca 05 2d           cmp        r5,#0x5
+    ```
 
 # Event listneing
 
