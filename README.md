@@ -88,6 +88,15 @@ We want to have more anchors being outputted from the dwm_loc_get
     ```
     000110ca 05 2d           cmp        r5,#0x5
     ```
+  - With also needing to increase the array of inputs datatype, from address `0x2000A048` (possible to change location but is the datatype that has the information about the anchors)
+    ```
+    000119dc 4f f4 c8 72     mov.w      r2,#0x140
+    ```
+    to
+    ```
+    000119dc 4f f4 c8 72     mov.w      r2,#0x190
+    ```
+    (80 bytes for each piece of information)
 
 # Event listneing
 
